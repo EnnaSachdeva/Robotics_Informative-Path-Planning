@@ -1,5 +1,7 @@
 # Robotics_Informative-Path-Planning
 
+run main_greedy.py #for greedy informative path planning
+run main_sophisticated.py # for sophisticated non-greedy path plannign
 The map estimation consists of 2 networks:
 
 • WorldEstimatingNetwork: It predicts how the world
@@ -11,7 +13,7 @@ which have already been traversed by the cells.
 what digit the world belongs. This gives the values corresponding to each class (digit from 0 to 9), where
 the world might belong to. 
 
-
+Greedy Algorithm for Path planning:
 For this case, the output of the WorldEstimatingNetwork
 has been normalized to values lesser than 0 has been normalized to 0. The information quality from neural network
 is obtained from the ouput of the DigitClassifcationNetwork,
@@ -41,3 +43,46 @@ digit which the world belongs to. However, if the difference
 is more, this contains more information which could help
 with the prediction of the image. This naturally makes the
 robot move in the direction of maximal information.
+
+Sophisticated Algorithm for Path planning:
+
+For this algorithm too, all negative values of estimated
+output from WorldEstimatingNetwork has been normalized
+to 0 and this resulting predicted image is further fed to the
+DigitClassifcationNetwork. In contrast to the greedy algorithm explained before, this approach will just use the prediction output of WorldEstimatingNetwork to determine the
+direction of movement. The algorithm works as following-
+
+• This algorithm is based on following the nearest maximum white/gray pixel value. white pixels in the predicted output.
+
+• It will search the nearest predicted pixel values greater
+than or equal to some threshhold (threshhold = 100).
+
+• As soon as it predicts this pixel, it finds a path towards
+that pixel with maximum number of non-zero pixels
+values. There can be cases, when the robot can get stuck
+in the local minima, where it will just move around
+those same high values pixels grids.
+
+• To eliminate such cases, a buffer (matrix) keeps a count
+of the grid cells traversed before and promotes moving
+towards those grid cells, which have not been traversed
+before.
+
+• In cases when all grid cells nearest to the pixels are
+already traversed, however the prediction is still lesser
+than 75%, the robot extends its search space and finds
+the white pixels in that search space.
+
+• However, there can be cases where robot might still not
+be able to find the white pixels, not traversed before,
+then the robot searches for pixels values which are
+lesser than threshhold values. Though, it will make the
+movement towards slightly darker pixels, however it
+will make the prediction more accurate. This adaptive
+threshhold acts as heuristics in this algorithm.
+
+• Further to eliminate false positive cases, where the
+neural network accidently predicts the right digit once,
+I have kept a count which ensures that if the softmax
+output is greater than 75% for at least 10 consequent
+cases, the iterations should keep on continuing.
