@@ -14,7 +14,7 @@ which have already been traversed by the cells.
 what digit the world belongs. This gives the values corresponding to each class (digit from 0 to 9), where
 the world might belong to. 
 
-# Greedy Algorithm for Path planning:
+## Greedy Algorithm for Path planning:
 For this case, the output of the WorldEstimatingNetwork
 has been normalized to values lesser than 0 has been normalized to 0. The information quality from neural network
 is obtained from the ouput of the DigitClassifcationNetwork,
@@ -45,7 +45,7 @@ is more, this contains more information which could help
 with the prediction of the image. This naturally makes the
 robot move in the direction of maximal information.
 
-# Sophisticated Algorithm for Path planning:
+## Sophisticated Algorithm for Path planning:
 
 For this algorithm too, all negative values of estimated
 output from WorldEstimatingNetwork has been normalized
