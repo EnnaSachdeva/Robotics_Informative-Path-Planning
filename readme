@@ -1,0 +1,53 @@
+Starting at (0,0), navigate to a specific corner of the map. The goal depends on what world you occupy. The worlds are constructed from the MNIST dataset, a hand drawn number dataset consisting of numbers 0-9. the grid world is 28x28
+if the MNIST digit is: 
+
+digit: 0-2 - goal: (0,27)
+digit: 3-5 - goal: (27,27)
+digit: 6-9 - goal: (27,0)
+
+The robot can travel one space at a time and can observe the value of the spaces it has visited. It costs -1 reward to move and -400 reward if you travel to the wrong goal. Reaching the correct goal provides +100 reward, at which point the mission ends. You will design algorithms to minimize your cost to reach the correct goal.  We have provided two trained neural networks to help. One network provides an estimate of what the world looks like given what you have currently observed. The other network takes this estimate and provides an estimate of what digit the world belongs to.
+
+
+This code was written in python 3.6.5
+To execute this code, you will need Python 3.5+ (I recommend downloading Anaconda) and pytorch
+pytorch can be downloaded at https://pytorch.org
+
+pytorch install instructions:
+1. go to https://pytorch.org
+2. Click the “get started” button
+3. selection the appropriate settings (I would recommend: Stable, OS, Conda, python 3.6, None)
+4. Run the “python main.py” to test
+
+
+
+FunctionList is the only file you need to concern yourself with. It provides 3 classes:
+
+Class Map:
+	Class Variables:
+		map - saves a numpy array of an MNIST digit
+		number - the number represented by the MNIST image
+
+	Functions:
+		GetNewMap - sets map to the next numpy array from the MNIST dataset
+
+
+Class WorldEsimtateNetwork:
+	Class Variables:
+		network - This is the network that will provide an estimate of what the world looks like
+
+	Functions:
+		runNetwork - requires two inputs. The first is the map at its current level of exploration. Second is a binary mask the same size of the map, with 1's for area's explored and 0's for unexplored regions
+
+		This function returns a numpy array of the current estimate of what the world looks like
+
+Class DigitClassifcationNetwork:
+	Class Variables:
+		network - This is the network that will provide an estimate of what Digit the world is
+
+	Functions:
+		runNetwork - Single input, the estimated world provided by WorldEstimateNetwork
+
+		This function returns an array of size 10, with each index representing the different digits the world could be. The largest number represents the networks estimate of what class the world is.
+
+	
+
